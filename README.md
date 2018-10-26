@@ -1,4 +1,4 @@
-# Proyecto primer tercio AREM 2018-2 
+# Proyecto segundo tercio AREM 2018-2 
 
 *WIP** En el presente proyecto experimentamos el desarrollo de un cliente en JS y y un servidor desarrollado en Java*
 
