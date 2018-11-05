@@ -26,7 +26,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-
+import {gets} from './Controllers'
 import './App.css';
 
 function TransitionUp(props) {
@@ -35,11 +35,77 @@ function TransitionUp(props) {
 
 class App extends Component {
 
-    state = {
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {open: false, currencies: [], rates: []};
+        this.initPage();
+    }
+
+    initPage(){
+        let self = this;
+        let currencies = [];
+        let rates = [];
+        let callbackCurrencies = {
+            onSuccess: function (response) {
+                let list = response.data;
+                console.log(list);
+                for (var key in list) {
+                    currencies.push({name:key,value:list[key]});
+                }
+                self.setState({currencies: currencies});
+                console.log(self.state.currencies);
+            },
+            onfailed: function (error) {
+                console.log(error);
+            }
+        };
+        let callbackRates = {
+            onSuccess: function (response) {
+                let list = response.data;
+                console.log(list);
+                for (var key in list) {
+                    rates.push({name:key,value:list[key]});
+                }
+                self.setState({rates: rates});
+                console.log(self.state.rates);
+            },
+            onfailed: function (error) {
+                console.log(error);
+            }
+        };
+        gets.getCurrencies(callbackCurrencies);
+        gets.getRates(callbackRates);
+    }
+
+    update(){
+        let self = this;
+        let currencies = [];
+        let rates = [];
+        let callback = {
+            onSuccess: function (response) {
+                let listCurrencies = response.data.currencies;
+                console.log(listCurrencies);
+                for (var key in listCurrencies) {
+                    currencies.push({name:key,value:listCurrencies[key]});
+                }
+                let listRates = response.data.rates;
+                console.log(listRates);
+                for (var key in listRates) {
+                    rates.push({name:key,value:listRates[key]});
+                }
+                self.setState({currencies: currencies, rates:rates, message:"Http 200: Update realized"});
+
+            },
+            onfailed: function (error) {
+                self.setState({message:"Http 202: Is not possible update yet"})
+                console.log(error);
+            }
+        };
+        gets.getLatest(callback);
+    }
 
     handleClick = () => {
+        this.update();
         this.setState({ open: true });
     };
 
@@ -55,6 +121,9 @@ class App extends Component {
     };
 
     render() {
+
+
+
         return (
             <div className="App">
                 <header className="App-header">
@@ -108,9 +177,8 @@ class App extends Component {
                             </Select>
                         </FormControl>
                         <br/>
-                        <Button variant={"raised"} color={"primary"}>Convert</Button>
                         <br/>
-                        <Button variant={"raised"} color={"primary"} onClick={this.handleClick}>Update exchange rate</Button>
+                        <Button variant={"raised"} color={"primary"} onClick={this.handleClick}>Update exchange rates</Button>
                         <br/>
                         <Snackbar
                             anchorOrigin={{
@@ -123,7 +191,7 @@ class App extends Component {
                             ContentProps={{
                                 'aria-describedby': 'message-id',
                             }}
-                            message={<span id="message-id">Successful call</span>}
+                            message={<span id="message-id">{this.state.message}</span>}
                             action={[
                                 <IconButton
                                     key="close"
@@ -149,6 +217,23 @@ class App extends Component {
                                             <TableCell numeric>Quote Rate</TableCell>
                                         </TableRow>
                                     </TableHead>
+                                    <TableBody>
+                                        {this.state.rates.map(row=>{
+                                          return(
+                                              <TableRow key={row.name}>
+                                                  <TableCell component="th" scope="row">
+                                                      {row.name.substr(0,3)}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {row.name.substr(3,6)}
+                                                  </TableCell>
+                                                  <TableCell numeric>
+                                                      {row.value}
+                                                  </TableCell>
+                                              </TableRow>
+                                          );
+                                        })}
+                                    </TableBody>
                                 </Table>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
