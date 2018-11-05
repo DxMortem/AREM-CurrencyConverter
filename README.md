@@ -1,6 +1,6 @@
 # Proyecto segundo tercio AREM 2018-2 
 
-*En el presente proyecto experimentamos el desarrollo de un cliente en React el cual se desplegó en Heroku y un servidor desarrollado en Java para mantener un cache en la aplicación desplegado en Amazon EC2. Adicionalmente se utilizaron tecnologías de Amazon web services como API Gateway y Amazon Lambda*
+*En el presente proyecto experimentamos el desarrollo de un cliente en React.js el cual se desplegó en Heroku y un servidor desarrollado en Java para mantener un cache en la aplicación desplegado en Amazon EC2. Adicionalmente se utilizaron tecnologías de Amazon web services como API Gateway y Amazon Lambda*
 
 #### Desarrollado por:
 >Diego Andrés Borrero Muñoz - 2103110  
@@ -41,7 +41,7 @@ Disfrute de la aplicación
 ## Link FrontEnd
 Por favor ingrese al siguiente link o a la carpeta *"frontend"* si desea conocer sobre la implementación del [FrontEnd](https://github.com/DxMortem/AREM-CurrencyConverter/tree/master/frontend)
 
-Por favor ingrese al siguiente link si desea ver el deploy de la aplicación [Heroku](https://currency-converter-frontend.herokuapp.com/) no se encontrarán en funcionamiento sus funcionalidades si el servidor EC2 apagado, para mayor información por favor comuniquese conmigo
+Por favor ingrese al siguiente link si desea ver el deploy de la aplicación [Heroku](https://currency-converter-frontend.herokuapp.com/) no se encontrarán en funcionamiento sus funcionalidades si el servidor EC2 (de cache) se encuentra apagado, para mayor información por favor comuniquese conmigo
 
 ## Link Cache Server
 Por favor ingrese al siguiente link o a la carpeta *BackEnd* si desea conocer sobre la implementación del [Cache server](https://github.com/DxMortem/AREM-CurrencyConverter/tree/master/backend) el cual fue desplegado en amazon EC2
