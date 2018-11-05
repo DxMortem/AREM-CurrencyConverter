@@ -43,9 +43,9 @@ public class CacheController {
     public ResponseEntity<?> getUpdated(){
         try {
             cacheService.updateCache();
-            ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
-            concurrentHashMap.put("currencies", mapper.writeValueAsString(cacheService.getSupportedCurrencies()));
-            concurrentHashMap.put("rates", mapper.writeValueAsString(cacheService.getRates()));
+            ConcurrentHashMap<String, ConcurrentHashMap<String,?>> concurrentHashMap = new ConcurrentHashMap<>();
+            concurrentHashMap.put("currencies", cacheService.getSupportedCurrencies());
+            concurrentHashMap.put("rates", cacheService.getRates());
             return new ResponseEntity<>(mapper.writeValueAsString(concurrentHashMap),HttpStatus.OK);
         } catch (BackendException e) {
             System.err.println("BackendException");
