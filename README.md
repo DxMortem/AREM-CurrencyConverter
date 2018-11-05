@@ -7,6 +7,12 @@
 Estudiante de Ingeniería de Sistemas  
 Escuela Colombiana de Ingeniería Julio Garavito.
 
+## Link Articulo
+En el siguiente link de [Google Drive](https://drive.google.com/open?id=1DlkHAge-Fay7vb-ex-umWw8wsqlKuexH) encontrará la explicación de la arquitectura e implementación.
+
+## Link Video
+Encontrará un vídeo explicando el demo del proyecto y su arquitectura en el siguiente link de [Google Drive](https://drive.google.com/open?id=1yRzDyoraYPHNlawYSIkEFCBBMIk75GlO)
+
 ## Despliegue local
 Si desea utilizar en su computador una copia de esta aplicación recuerde que debe tener instalado *Node.js* y *Java 8* previamente 
 
@@ -39,9 +45,3 @@ Por favor ingrese al siguiente link si desea ver el deploy de la aplicación [He
 
 ## Link Cache Server
 Por favor ingrese al siguiente link o a la carpeta *BackEnd* si desea conocer sobre la implementación del [Cache server](https://github.com/DxMortem/AREM-CurrencyConverter/tree/master/backend) el cual fue desplegado en amazon EC2
-
-## Link Articulo
-En el siguiente link de [Google Drive](https://drive.google.com/open?id=1DlkHAge-Fay7vb-ex-umWw8wsqlKuexH) encontrará la explicación de la arquitectura e implementación.
-
-## Link Video
-Encontrará un vídeo explicando el demo del proyecto en el siguiente link de [Google Drive]()
