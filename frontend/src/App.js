@@ -37,20 +37,20 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {open: false, currencies: [], rates: []};
+        this.state = {open: false, currencies: {}, rates: [], source:"", target:""};
         this.initPage();
     }
 
     initPage(){
         let self = this;
-        let currencies = [];
+        let currencies = {};
         let rates = [];
         let callbackCurrencies = {
             onSuccess: function (response) {
                 let list = response.data;
                 console.log(list);
                 for (var key in list) {
-                    currencies.push({name:key,value:list[key]});
+                    currencies[key]=list[key];
                 }
                 self.setState({currencies: currencies});
                 console.log(self.state.currencies);
@@ -79,14 +79,14 @@ class App extends Component {
 
     update(){
         let self = this;
-        let currencies = [];
+        let currencies = {};
         let rates = [];
         let callback = {
             onSuccess: function (response) {
                 let listCurrencies = response.data.currencies;
                 console.log(listCurrencies);
                 for (var key in listCurrencies) {
-                    currencies.push({name:key,value:listCurrencies[key]});
+                    currencies[key]=listCurrencies[key];
                 }
                 let listRates = response.data.rates;
                 console.log(listRates);
@@ -225,7 +225,7 @@ class App extends Component {
                                                       {row.name.substr(0,3)}
                                                   </TableCell>
                                                   <TableCell>
-                                                      {row.name.substr(3,6)}
+                                                      {row.name.substr(3,6) + " ("+this.state.currencies[row.name.substr(3,6)]+")"}
                                                   </TableCell>
                                                   <TableCell numeric>
                                                       {row.value}
