@@ -29,22 +29,18 @@ import CloseIcon from '@material-ui/icons/Close';
 import {gets} from './Controllers'
 import './App.css';
 
-function TransitionUp(props) {
-    return <Slide {...props} direction="up" />;
-}
-
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {open: false, currencies: {}, rates: [], source:"", target:""};
+        this.state = {open: false, currencies: {}, rates: {},  source:0.1, target:0.0, amount:0.0, targetAmount:0.0};
         this.initPage();
     }
 
     initPage(){
         let self = this;
         let currencies = {};
-        let rates = [];
+        let rates = {};
         let callbackCurrencies = {
             onSuccess: function (response) {
                 let list = response.data;
@@ -64,7 +60,8 @@ class App extends Component {
                 let list = response.data;
                 console.log(list);
                 for (var key in list) {
-                    rates.push({name:key,value:list[key]});
+                    let ss = key.substr(3,6);
+                    rates[ss]=list[key];
                 }
                 self.setState({rates: rates});
                 console.log(self.state.rates);
@@ -80,9 +77,10 @@ class App extends Component {
     update(){
         let self = this;
         let currencies = {};
-        let rates = [];
+        let rates = {};
         let callback = {
             onSuccess: function (response) {
+                console.log(response.data);
                 let listCurrencies = response.data.currencies;
                 console.log(listCurrencies);
                 for (var key in listCurrencies) {
@@ -91,13 +89,16 @@ class App extends Component {
                 let listRates = response.data.rates;
                 console.log(listRates);
                 for (var key in listRates) {
-                    rates.push({name:key,value:listRates[key]});
+                    let ss = key.substr(3,6);
+                    rates[ss]=listRates[key];
                 }
+                console.log(currencies);
+                console.log(rates);
                 self.setState({currencies: currencies, rates:rates, message:"Http 200: Update realized"});
 
             },
             onfailed: function (error) {
-                self.setState({message:"Http 202: Is not possible update yet"})
+                self.setState({message:"Http 202: Is not possible update yet"});
                 console.log(error);
             }
         };
@@ -116,8 +117,39 @@ class App extends Component {
 
         this.setState({ open: false });
     };
-    handleChange = event => {
-        this.setState({[event.target.name]: event.target.value});
+
+    handleAmountChange (e){
+        this.setState({
+            amount : parseFloat(e.target.value)
+        });
+        this.state = {open: this.state.open, currencies: this.state.currencies, rates: this.state.rates,
+            source:this.state.source, target:this.state.target, amount:parseFloat(e.target.value), targetAmount:this.state.targetAmount};
+        this.updateTargetAmount();
+
+    };
+    handleSourceCurrencyChange (e){
+        this.setState({
+            source : e.target.value
+        });
+        this.state = {open: this.state.open, currencies: this.state.currencies, rates: this.state.rates,
+            source:e.target.value, target:this.state.target, amount:this.state.amount, targetAmount:this.state.targetAmount};
+        this.updateTargetAmount();
+
+    };
+    handleTargetCurrencyChange (e){
+
+        this.setState({
+            target : e.target.value
+        });
+        this.state = {open: this.state.open, currencies: this.state.currencies, rates: this.state.rates,
+            source:this.state.source, target:e.target.value, amount:this.state.amount, targetAmount:this.state.targetAmount};
+        this.updateTargetAmount();
+    };
+    updateTargetAmount(){
+        let temp = this.state.amount / this.state.source * this.state.target;
+        this.setState({
+            targetAmount : temp
+        });
     };
 
     render() {
@@ -137,44 +169,52 @@ class App extends Component {
 
                         <FormControl margin="normal">
                             <InputLabel>Source Amount</InputLabel>
-                            <Input type="numeric" id="sourceAmount"/>
+                            <Input type="numeric" id="sourceAmount" value={this.state.amount} onChange={evt => this.handleAmountChange(evt)}/>
                         </FormControl>
                         <FormControl>
-                            <InputLabel htmlFor="sourceCurrency">
-                                Source Currency
-                            </InputLabel>
+                            <InputLabel htmlFor="sourceCurrency">Source Currency</InputLabel>
                             <Select
-                                autoWidth="true"
-                                value={""}//this.state.age}
-                                id="sourceCurrency"
+                                style={{width: '150px',height:'30px'}}
+                                value={this.state.source}
+                                onChange={evt => this.handleSourceCurrencyChange(evt)}
+                                inputProps={{
+                                    name: 'source',
+                                    id: 'sourceCurrency',
+                                }}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {/*<MenuItem value={20}>Twenty</MenuItem>*/}
-                                {/*<MenuItem value={30}>Thirty</MenuItem>*/}
+                                {Object.keys(this.state.currencies).sort().map(row =>{
+                                    return(
+                                        <MenuItem value={this.state.rates[row]}>
+                                            <em>{row}</em>
+                                        </MenuItem>
+                                    )
+                                })}
                             </Select>
                         </FormControl>
-
+                        <FormControl>
+                            <InputLabel htmlFor="targetCurrency">Target Currency</InputLabel>
+                            <Select
+                                style={{width: '150px',height:'30px'}}
+                                value={this.state.target}
+                                onChange={evt => this.handleTargetCurrencyChange(evt)}
+                                inputProps={{
+                                    name: 'target',
+                                    id: 'targetCurrency',
+                                }}
+                            >
+                                {Object.keys(this.state.currencies).sort().map(row =>{
+                                    return(
+                                        <MenuItem value={this.state.rates[row]}>
+                                            <em>{row}</em>
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <br/>
                         <FormControl margin="normal">
                             <InputLabel>Target Amount</InputLabel>
-                            <Input type="numeric" id="targetAmount"/>
-                        </FormControl>
-                        <FormControl>
-                            <InputLabel htmlFor="targetCurrency">
-                                Target Currency
-                            </InputLabel>
-                            <Select
-                                autoWidth="true"
-                                value={""}//this.state.age}
-                                id="targetCurrency"
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {/*<MenuItem value={20}>Twenty</MenuItem>*/}
-                                {/*<MenuItem value={30}>Thirty</MenuItem>*/}
-                            </Select>
+                            <Input type="numeric" id="targetAmount" disabled value={this.state.targetAmount}/>
                         </FormControl>
                         <br/>
                         <br/>
@@ -218,17 +258,17 @@ class App extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.state.rates.map(row=>{
+                                        {Object.keys(this.state.rates).map(row=>{
                                           return(
-                                              <TableRow key={row.name}>
+                                              <TableRow key={row}>
                                                   <TableCell component="th" scope="row">
-                                                      {row.name.substr(0,3)}
+                                                      {"USD"}
                                                   </TableCell>
                                                   <TableCell>
-                                                      {row.name.substr(3,6) + " ("+this.state.currencies[row.name.substr(3,6)]+")"}
+                                                      {row + " ("+this.state.currencies[row]+")"}
                                                   </TableCell>
                                                   <TableCell numeric>
-                                                      {row.value}
+                                                      {this.state.rates[row]}
                                                   </TableCell>
                                               </TableRow>
                                           );
