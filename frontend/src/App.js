@@ -120,10 +120,10 @@ class App extends Component {
 
     handleAmountChange (e){
         this.setState({
-            amount : parseFloat(e.target.value)
+            amount : (e.target.value==="")?0.0:parseFloat(e.target.value)
         });
         this.state = {open: this.state.open, currencies: this.state.currencies, rates: this.state.rates,
-            source:this.state.source, target:this.state.target, amount:parseFloat(e.target.value), targetAmount:this.state.targetAmount};
+            source:this.state.source, target:this.state.target, amount:(e.target.value==="")?0.0:parseFloat(e.target.value), targetAmount:this.state.targetAmount};
         this.updateTargetAmount();
 
     };
